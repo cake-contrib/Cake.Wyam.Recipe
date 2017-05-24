@@ -167,7 +167,7 @@ Task("Clean")
 Task("Create-Nuget-Package")
     .Does(() =>
 {
-    var nuspecFile = "./Cake.Recipe/Cake.Recipe.nuspec";
+    var nuspecFile = "./Cake.Wyam.Recipe/Cake.Wyam.Recipe.nuspec";
 
     EnsureDirectoryExists(BuildParameters.Paths.Directories.NuGetPackages);
 
