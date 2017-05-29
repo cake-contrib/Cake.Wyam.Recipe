@@ -34,23 +34,6 @@ BuildParameters.Tasks.PrintAppVeyorEnvironmentVariablesTask = Task("Print-AppVey
     Information("CONFIGURATION: {0}", EnvironmentVariable("CONFIGURATION"));
 });
 
-BuildParameters.Tasks.UploadAppVeyorArtifactsTask = Task("Upload-AppVeyor-Artifacts")
-    .IsDependentOn("Package")
-    .WithCriteria(() => BuildParameters.IsRunningOnAppVeyor)
-    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages) || DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
-    .Does(() =>
-{
-    foreach(var package in GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*"))
-    {
-        AppVeyor.UploadArtifact(package);
-    }
-
-    foreach(var package in GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/*"))
-    {
-        AppVeyor.UploadArtifact(package);
-    }
-});
-
 BuildParameters.Tasks.ClearAppVeyorCacheTask = Task("Clear-AppVeyor-Cache")
     .Does(() =>
         RequireAddin(@"#addin nuget:?package=Cake.AppVeyor&version=1.1.0.9

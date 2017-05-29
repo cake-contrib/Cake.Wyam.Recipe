@@ -67,7 +67,6 @@ BuildParameters.Tasks.ShowInfoTask = Task("Show-Info")
     Information("Target: {0}", BuildParameters.Target);
     Information("Configuration: {0}", BuildParameters.Configuration);
 
-    Information("Source DirectoryPath: {0}", MakeAbsolute(BuildParameters.SourceDirectoryPath));
     Information("Build DirectoryPath: {0}", MakeAbsolute(BuildParameters.Paths.Directories.Build));
 });
 
@@ -81,14 +80,10 @@ BuildParameters.Tasks.CleanTask = Task("Clean")
     CleanDirectories(BuildParameters.Paths.Directories.ToClean);
 });
 
-BuildParameters.Tasks.PackageTask = Task("Package")
-    .IsDependentOn("Export-Release-Notes");
-
 BuildParameters.Tasks.DefaultTask = Task("Default")
-    .IsDependentOn("Package");
+    .IsDependentOn("Preview-Documentation");
 
 BuildParameters.Tasks.AppVeyorTask = Task("AppVeyor")
-    .IsDependentOn("Upload-AppVeyor-Artifacts")
     .IsDependentOn("Publish-Documentation")
     .Finally(() =>
 {
@@ -130,10 +125,6 @@ public class Builder
 
     public void Run()
     {
-        BuildParameters.Tasks.PackageTask.IsDependentOn("Create-NuGet-Package");
-        BuildParameters.IsDotNetCoreBuild = false;
-        BuildParameters.IsNuGetBuild = true;
-
         _action(BuildParameters.Target);
     }
 }

@@ -112,7 +112,6 @@ public static class BuildParameters
     public static void SetParameters(
         ICakeContext context,
         BuildSystem buildSystem,
-        DirectoryPath sourceDirectoryPath,
         string title,
         DirectoryPath rootDirectoryPath = null,
         string repositoryOwner = null,
@@ -142,15 +141,15 @@ public static class BuildParameters
         AppVeyorAccountName = appVeyorAccountName ?? RepositoryOwner.Replace("-", "").ToLower();
         AppVeyorProjectSlug = appVeyorProjectSlug ?? Title.Replace(".", "-").ToLower();
 
-        WyamRootDirectoryPath = wyamRootDirectoryPath ?? context.MakeAbsolute(context.Directory("docs"));
+        WyamRootDirectoryPath = wyamRootDirectoryPath ?? context.MakeAbsolute(RootDirectoryPath);
         WyamPublishDirectoryPath = wyamPublishDirectoryPath ?? context.MakeAbsolute(context.Directory("BuildArtifacts/temp/_PublishedDocumentation"));
         WyamConfigurationFile = wyamConfigurationFile ?? context.MakeAbsolute((FilePath)"config.wyam");
-        WyamRecipe = wyamRecipe ?? "Docs";
-        WyamTheme = wyamTheme ?? "Samson";
-        WyamSourceFiles = wyamSourceFiles ?? "../../" + SourceDirectoryPath.FullPath + "/**/{!bin,!obj,!packages,!*.Tests,}/**/*.cs";
+        WyamRecipe = wyamRecipe ?? "Blog";
+        WyamTheme = wyamTheme ?? "CleanBlog";
+        WyamSourceFiles = wyamSourceFiles ?? "../../" + RootDirectoryPath.FullPath + "/**/{!bin,!obj,!packages,!*.Tests,}/**/*.cs";
         WebHost = webHost ?? string.Format("{0}.github.io", repositoryOwner);
-        WebLinkRoot = webLinkRoot ?? title;
-        WebBaseEditUrl = webBaseEditUrl ?? string.Format("https://github.com/{0}/{1}/tree/develop/docs/input/", repositoryOwner, title);
+        WebLinkRoot = webLinkRoot ?? "/";
+        WebBaseEditUrl = webBaseEditUrl ?? string.Format("https://github.com/{0}/{1}/tree/master/input/", repositoryOwner, title);
 
         Target = context.Argument("target", "Default");
         Configuration = context.Argument("configuration", "Release");

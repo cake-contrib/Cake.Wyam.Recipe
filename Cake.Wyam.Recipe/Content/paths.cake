@@ -1,6 +1,5 @@
 public class BuildPaths
 {
-    public BuildFiles Files { get; private set; }
     public BuildDirectories Directories { get; private set; }
 
     public static BuildPaths GetPaths(ICakeContext context)
@@ -14,40 +13,15 @@ public class BuildPaths
         var buildDirectoryPath             = "./BuildArtifacts";
         var publishedDocumentationDirectory= buildDirectoryPath + "/Documentation";
 
-        // Files
-        var repoFilesPaths = new FilePath[] {
-            "LICENSE",
-            "README.md"
-        };
-
         var buildDirectories = new BuildDirectories(
             buildDirectoryPath,
-            publishedDocumentationDirectory,
-            );
-
-        var buildFiles = new BuildFiles(
-            context,
-            repoFilesPaths
+            publishedDocumentationDirectory
             );
 
         return new BuildPaths
         {
-            Files = buildFiles,
             Directories = buildDirectories
         };
-    }
-}
-
-public class BuildFiles
-{
-    public ICollection<FilePath> RepoFilesPaths { get; private set; }
-
-    public BuildFiles(
-        ICakeContext context,
-        FilePath[] repoFilesPaths
-        )
-    {
-        RepoFilesPaths = Filter(context, repoFilesPaths);
     }
 }
 

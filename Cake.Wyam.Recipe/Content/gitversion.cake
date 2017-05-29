@@ -25,8 +25,6 @@ public class BuildVersion
             if (!BuildParameters.IsLocalBuild || BuildParameters.IsPublishBuild || BuildParameters.IsReleaseBuild)
             {
                 context.GitVersion(new GitVersionSettings{
-                    UpdateAssemblyInfoFilePath = BuildParameters.Paths.Files.SolutionInfoFilePath,
-                    UpdateAssemblyInfo = true,
                     OutputType = GitVersionOutput.BuildServer
                 });
 
