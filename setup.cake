@@ -8,7 +8,8 @@ BuildParameters.SetParameters(context: Context,
                             title: "Cake.Wyam.Recipe",
                             repositoryOwner: "cake-contrib",
                             repositoryName: "Cake.Wyam.Recipe",
-                            appVeyorAccountName: "cakecontrib");
+                            appVeyorAccountName: "cakecontrib",
+                            nuspecFilePath: "./Cake.Wyam.Recipe/Cake.Wyam.Recipe.nuspec");
 
 BuildParameters.PrintParameters(Context);
 
