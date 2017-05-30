@@ -70,16 +70,6 @@ BuildParameters.Tasks.ShowInfoTask = Task("Show-Info")
     Information("Build DirectoryPath: {0}", MakeAbsolute(BuildParameters.Paths.Directories.Build));
 });
 
-BuildParameters.Tasks.CleanTask = Task("Clean")
-    .IsDependentOn("Show-Info")
-    .IsDependentOn("Print-AppVeyor-Environment-Variables")
-    .Does(() =>
-{
-    Information("Cleaning...");
-
-    CleanDirectories(BuildParameters.Paths.Directories.ToClean);
-});
-
 BuildParameters.Tasks.DefaultTask = Task("Default")
     .IsDependentOn("Preview-Documentation");
 
@@ -98,9 +88,6 @@ BuildParameters.Tasks.ClearCacheTask = Task("ClearCache")
 
 BuildParameters.Tasks.PreviewTask = Task("Preview")
   .IsDependentOn("Preview-Documentation");
-
-BuildParameters.Tasks.PublishDocsTask = Task("PublishDocs")
-    .IsDependentOn("Force-Publish-Documentation");
 
 ///////////////////////////////////////////////////////////////////////////////
 // EXECUTION

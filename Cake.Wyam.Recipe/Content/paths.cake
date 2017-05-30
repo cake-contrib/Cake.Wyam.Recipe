@@ -29,7 +29,6 @@ public class BuildDirectories
 {
     public DirectoryPath Build { get; private set; }
     public DirectoryPath PublishedDocumentation { get; private set; }
-    public ICollection<DirectoryPath> ToClean { get; private set; }
 
     public BuildDirectories(
         DirectoryPath build,
@@ -38,9 +37,5 @@ public class BuildDirectories
     {
         Build = build;
         PublishedDocumentation = publishedDocumentation;
-
-        ToClean = new[] {
-            Build
-        };
     }
 }
