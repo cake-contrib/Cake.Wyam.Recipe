@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Cake.Wyam.Recipe</id>
+    <version>0.1.0</version>
+    <authors>gep13</authors>
+    <owners>cake-contrib, gep13</owners>
+    <description>Re-usable build script for Cake that can be used for numerous Wyam projects.</description>
+    <tags>Build Cake Wyam Recipe</tags>
+  </metadata>
+</package>
