@@ -1,5 +1,7 @@
 public static class BuildParameters
 {
+    private static readonly IList<string> wyamAssemblyFiles = new List<string>();
+
     public static string Target { get; private set; }
     public static string Configuration { get; private set; }
     public static bool IsLocalBuild { get; private set; }
@@ -36,6 +38,13 @@ public static class BuildParameters
     public static string WyamRecipe { get; private set; }
     public static string WyamTheme { get; private set; }
     public static string WyamSourceFiles { get; private set; }
+    public static IList<string> WyamAssemblyFiles 
+    { 
+        get
+        {
+            return wyamAssemblyFiles;
+        }
+    }
     public static string WebHost { get; private set; }
     public static string WebLinkRoot { get; private set; }
     public static string WebBaseEditUrl { get; private set; }
@@ -44,15 +53,23 @@ public static class BuildParameters
     { 
         get
         {
-            return new Dictionary<string, object>
+            var settings =
+                new Dictionary<string, object>
+                {
+                    { "Host",  WebHost },
+                    { "LinkRoot",  WebLinkRoot },
+                    { "BaseEditUrl", WebBaseEditUrl },
+                    { "SourceFiles", WyamSourceFiles },
+                    { "Title", Title },
+                    { "IncludeGlobalNamespace", false }
+                };
+
+            if (WyamAssemblyFiles.Any()) 
             {
-                { "Host",  WebHost },
-                { "LinkRoot",  WebLinkRoot },
-                { "BaseEditUrl", WebBaseEditUrl },
-                { "SourceFiles", WyamSourceFiles },
-                { "Title", Title },
-                { "IncludeGlobalNamespace", false }
-            };
+                settings.Add("AssemblyFiles", WyamAssemblyFiles);
+            }
+
+            return settings;
         } 
     }
 
@@ -118,6 +135,7 @@ public static class BuildParameters
         context.Information("WyamRecipe: {0}", WyamRecipe);
         context.Information("WyamTheme: {0}", WyamTheme);
         context.Information("WyamSourceFiles: {0}", WyamSourceFiles);
+        context.Information("WyamAssemblyFiles: {0}", string.Join(", ", WyamAssemblyFiles));
         context.Information("Wyam Deploy Branch: {0}", Wyam.DeployBranch);
         context.Information("Wyam Deploy Remote: {0}", Wyam.DeployRemote);
         context.Information("WebHost: {0}", WebHost);
@@ -141,6 +159,7 @@ public static class BuildParameters
         string wyamRecipe = null,
         string wyamTheme = null,
         string wyamSourceFiles = null,
+        IEnumerable<string> wyamAssemblyFiles = null,
         string webHost = null,
         string webLinkRoot = null,
         string webBaseEditUrl = null)
@@ -163,6 +182,15 @@ public static class BuildParameters
         WyamRecipe = wyamRecipe ?? "Blog";
         WyamTheme = wyamTheme ?? "CleanBlog";
         WyamSourceFiles = wyamSourceFiles ?? "../../" + RootDirectoryPath.FullPath + "/**/{!bin,!obj,!packages,!*.Tests,}/**/*.cs";
+
+        if (wyamAssemblyFiles != null)
+        {
+            foreach (var assemblyFile in wyamAssemblyFiles) 
+            {
+                WyamAssemblyFiles.Add(assemblyFile);
+            }
+        }
+
         WebHost = webHost ?? string.Format("{0}.github.io", repositoryOwner);
         WebLinkRoot = webLinkRoot ?? "/";
         WebBaseEditUrl = webBaseEditUrl ?? string.Format("https://github.com/{0}/{1}/tree/master/input/", repositoryOwner, title);
