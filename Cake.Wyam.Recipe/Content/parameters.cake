@@ -40,6 +40,22 @@ public static class BuildParameters
     public static string WebLinkRoot { get; private set; }
     public static string WebBaseEditUrl { get; private set; }
 
+    public static IDictionary<string, object> WyamSettings 
+    { 
+        get
+        {
+            return new Dictionary<string, object>
+            {
+                { "Host",  WebHost },
+                { "LinkRoot",  WebLinkRoot },
+                { "BaseEditUrl", WebBaseEditUrl },
+                { "SourceFiles", WyamSourceFiles },
+                { "Title", Title },
+                { "IncludeGlobalNamespace", false }
+            };
+        } 
+    }
+
     static BuildParameters()
     {
         Tasks = new BuildTasks();
