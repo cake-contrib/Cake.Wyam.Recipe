@@ -30,7 +30,7 @@ public static class BuildParameters
     public static string AppVeyorAccountName { get; private set; }
     public static string AppVeyorProjectSlug { get; private set; }
 
-    public static bool ShouldGenerateDocumentation { get; private set; }
+    public static bool ShouldPublishDocumentation { get; private set; }
 
     public static DirectoryPath WyamRootDirectoryPath { get; private set; }
     public static DirectoryPath WyamPublishDirectoryPath { get; private set; }
@@ -123,7 +123,7 @@ public static class BuildParameters
         context.Information("IsDevelopBranch: {0}", IsDevelopBranch);
         context.Information("IsReleaseBranch: {0}", IsReleaseBranch);
         context.Information("IsHotFixBranch: {0}", IsHotFixBranch);
-        context.Information("ShouldGenerateDocumentation: {0}", ShouldGenerateDocumentation);
+        context.Information("ShouldPublishDocumentation: {0}", ShouldPublishDocumentation);
         context.Information("IsRunningOnUnix: {0}", IsRunningOnUnix);
         context.Information("IsRunningOnWindows: {0}", IsRunningOnWindows);
         context.Information("IsRunningOnAppVeyor: {0}", IsRunningOnAppVeyor);
@@ -152,7 +152,7 @@ public static class BuildParameters
         string repositoryName = null,
         string appVeyorAccountName = null,
         string appVeyorProjectSlug = null,
-        bool shouldGenerateDocumentation = true,
+        bool shouldPublishDocumentation = true,
         DirectoryPath wyamRootDirectoryPath = null,
         DirectoryPath wyamPublishDirectoryPath = null,
         FilePath wyamConfigurationFile = null,
@@ -229,11 +229,11 @@ public static class BuildParameters
 
         SetBuildPaths(BuildPaths.GetPaths(context));
 
-        ShouldGenerateDocumentation = (!IsLocalBuild &&
+        ShouldPublishDocumentation = (!IsLocalBuild &&
                                 !IsPullRequest &&
                                 IsMainRepository &&
                                 (IsMasterBranch || IsDevelopBranch) &&
-                                shouldGenerateDocumentation);
+                                shouldPublishDocumentation);
 
     }
 }
