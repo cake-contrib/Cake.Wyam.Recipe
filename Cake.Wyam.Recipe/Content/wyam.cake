@@ -27,7 +27,7 @@ BuildParameters.Tasks.BuildDocumentationTask = Task("Build-Documentation")
 
 BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
     .IsDependentOn("Build-Documentation")
-    .WithCriteria(() => BuildParameters.ShouldGenerateDocumentation)
+    .WithCriteria(() => BuildParameters.ShouldPublishDocumentation)
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
     .Does(() => RequireTool(KuduSyncTool, () => {
         if(BuildParameters.CanUseWyam)
