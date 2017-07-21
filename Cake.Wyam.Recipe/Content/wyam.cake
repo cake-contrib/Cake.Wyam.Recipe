@@ -1,3 +1,7 @@
+#r "System.Net.Http"
+using System.Net.Http;
+using System.Net.Http.Headers;
+
 ///////////////////////////////////////////////////////////////////////////////
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
@@ -80,20 +84,31 @@ BuildParameters.Tasks.PurgeCloudflareCacheTask = Task("Purge-Cloudflare-Cache")
 {
     if(BuildParameters.CanUseCloudflare)
     {
-        var settings = new HttpSettings
-        {
-            Headers = new Dictionary<string, string>
+        var result = AsyncHelpers.RunSync(
+        async ()=> {
+            var request = new HttpRequestMessage
             {
-                { "X-Auth-Email", BuildParameters.Cloudflare.AuthEmail },
-                { "X-Auth-Key", BuildParameters.Cloudflare.AuthKey },
-                { "Content-Type", "application/json" }
-            },
-            EnsureSuccessStatusCode = true
-        };
+                Headers =
+                {
+                    { "X-Auth-Email", BuildParameters.Cloudflare.AuthEmail },
+                    { "X-Auth-Key", BuildParameters.Cloudflare.AuthKey }
+                },
+                Content = new StringContent("{ \"purge_everything\": true }", Encoding.UTF8, "application/json"),
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri(string.Format("https://api.cloudflare.com/client/v4/zones/{0}/purge_cache", BuildParameters.Cloudflare.ZoneId))
+            };
 
-        var apiUrl = string.Format("https://api.cloudflare.com/client/v4/zones/{0}/purge_cache", BuildParameters.Cloudflare.ZoneId);
+            using(var client = new HttpClient())
+            {
+                using(var r = await client.SendAsync(request))
+                {
+                    string message = await r.Content.ReadAsStringAsync();
+                    return message;
+                }
+            }
+        });
 
-        HttpDelete(apiUrl, settings);
+        Information(result);
     }
 });
 
