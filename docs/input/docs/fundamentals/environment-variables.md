@@ -37,3 +37,17 @@ URI of the remote repository where the Wyam documentation is published to. Used 
 ## WYAM_DEPLOY_BRANCH
 
 Branch into which the Wyam documentation should be published. Used to [publish documentation](../usage/publishing-documentation).
+
+# Cloudflare
+
+## CLOUDFLARE_AUTH_EMAIL
+
+The email address associated with your Cloudflare Account.
+
+## CLOUDFLARE_AUTH_KEY
+
+The auth key which you can get from within your Cloudflare account.
+
+## CLOUDFLARE_ZONE_ID
+
+The zone id of the website that you are trying to purge the files from.  This can be found by following [these instructions](https://api.cloudflare.com/#getting-started-resource-ids).

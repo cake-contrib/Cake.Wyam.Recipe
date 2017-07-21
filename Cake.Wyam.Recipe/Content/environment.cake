@@ -6,6 +6,9 @@ public static class Environment
     public static string WyamAccessTokenVariable { get; private set; }
     public static string WyamDeployRemoteVariable { get; private set; }
     public static string WyamDeployBranchVariable { get; private set; }
+    public static string CloudflareAuthEmail { get; private set; }
+    public static string CloudflareAuthKey { get; private set; }
+    public static string CloudflareZoneId { get; private set; }
 
     public static void SetVariableNames(
         string githubUserNameVariable = null,
@@ -13,7 +16,10 @@ public static class Environment
         string appVeyorApiTokenVariable = null,
         string wyamAccessTokenVariable = null,
         string wyamDeployRemoteVariable = null,
-        string wyamDeployBranchVariable = null)
+        string wyamDeployBranchVariable = null,
+        string cloudflareAuthEmail = null,
+        string cloudflareAuthKey = null,
+        string cloudflareZoneId = null)
     {
         GithubUserNameVariable = githubUserNameVariable ?? "GITHUB_USERNAME";
         GithubPasswordVariable = githubPasswordVariable ?? "GITHUB_PASSWORD";
@@ -21,5 +27,8 @@ public static class Environment
         WyamAccessTokenVariable = wyamAccessTokenVariable ?? "WYAM_ACCESS_TOKEN";
         WyamDeployRemoteVariable = wyamDeployRemoteVariable ?? "WYAM_DEPLOY_REMOTE";
         WyamDeployBranchVariable = wyamDeployBranchVariable ?? "WYAM_DEPLOY_BRANCH";
+        CloudflareAuthEmail = cloudflareAuthEmail ?? "CLOUDFLARE_AUTH_EMAIL";
+        CloudflareAuthKey = cloudflareAuthKey ?? "CLOUDFLARE_AUTH_KEY";
+        CloudflareZoneId = cloudflareZoneId ?? "CLOUDFLARE_ZONE_ID";
     }
 }

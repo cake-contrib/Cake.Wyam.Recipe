@@ -74,7 +74,7 @@ BuildParameters.Tasks.DefaultTask = Task("Default")
     .IsDependentOn("Preview-Documentation");
 
 BuildParameters.Tasks.AppVeyorTask = Task("AppVeyor")
-    .IsDependentOn("Publish-Documentation")
+    .IsDependentOn("Purge-Cloudflare-Cache")
     .Finally(() =>
 {
     if(publishingError)

@@ -1,3 +1,7 @@
+#r "System.Net.Http"
+using System.Net.Http;
+using System.Net.Http.Headers;
+
 ///////////////////////////////////////////////////////////////////////////////
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
@@ -71,6 +75,41 @@ BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
     Error(exception.Message);
     Information("Publish-Documentation Task failed, but continuing with next Task...");
     publishingError = true;
+});
+
+BuildParameters.Tasks.PurgeCloudflareCacheTask = Task("Purge-Cloudflare-Cache")
+    .IsDependentOn("Publish-Documentation")
+    .WithCriteria(() => BuildParameters.ShouldPurgeCloudflareCache)
+    .Does(() =>
+{
+    if(BuildParameters.CanUseCloudflare)
+    {
+        var result = AsyncHelpers.RunSync(
+        async ()=> {
+            var request = new HttpRequestMessage
+            {
+                Headers =
+                {
+                    { "X-Auth-Email", BuildParameters.Cloudflare.AuthEmail },
+                    { "X-Auth-Key", BuildParameters.Cloudflare.AuthKey }
+                },
+                Content = new StringContent("{ \"purge_everything\": true }", Encoding.UTF8, "application/json"),
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri(string.Format("https://api.cloudflare.com/client/v4/zones/{0}/purge_cache", BuildParameters.Cloudflare.ZoneId))
+            };
+
+            using(var client = new HttpClient())
+            {
+                using(var r = await client.SendAsync(request))
+                {
+                    string message = await r.Content.ReadAsStringAsync();
+                    return message;
+                }
+            }
+        });
+
+        Information(result);
+    }
 });
 
 BuildParameters.Tasks.PreviewDocumentationTask = Task("Preview-Documentation")
