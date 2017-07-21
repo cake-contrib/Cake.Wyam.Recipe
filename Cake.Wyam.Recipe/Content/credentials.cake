@@ -34,6 +34,20 @@ public class WyamCredentials
     }
 }
 
+public class CloudflareCredentials
+{
+    public string AuthEmail { get; private set; }
+    public string AuthKey { get; private set; }
+    public string ZoneId { get; private set; }
+
+    public CloudflareCredentials(string authEmail, string authKey, string zoneId)
+    {
+        AuthEmail = authEmail;
+        AuthKey = authKey;
+        ZoneId = zoneId;
+    }
+}
+
 public static GitHubCredentials GetGitHubCredentials(ICakeContext context)
 {
     return new GitHubCredentials(
@@ -53,4 +67,12 @@ public static WyamCredentials GetWyamCredentials(ICakeContext context)
         context.EnvironmentVariable(Environment.WyamAccessTokenVariable),
         context.EnvironmentVariable(Environment.WyamDeployRemoteVariable),
         context.EnvironmentVariable(Environment.WyamDeployBranchVariable));
+}
+
+public static CloudflareCredentials GetCloudflareCredentials(ICakeContext context)
+{
+    return new CloudflareCredentials(
+        context.EnvironmentVariable(Environment.CloudflareAuthEmail),
+        context.EnvironmentVariable(Environment.CloudflareAuthKey),
+        context.EnvironmentVariable(Environment.CloudflareZoneId));
 }

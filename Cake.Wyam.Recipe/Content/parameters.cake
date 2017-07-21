@@ -20,6 +20,7 @@ public static class BuildParameters
     public static GitHubCredentials GitHub { get; private set; }
     public static AppVeyorCredentials AppVeyor { get; private set; }
     public static WyamCredentials Wyam { get; private set; }
+    public static CloudflareCredentials Cloudflare { get; private set; }
     public static BuildVersion Version { get; private set; }
     public static BuildPaths Paths { get; private set; }
     public static BuildTasks Tasks { get; set; }
@@ -31,6 +32,7 @@ public static class BuildParameters
     public static string AppVeyorProjectSlug { get; private set; }
 
     public static bool ShouldPublishDocumentation { get; private set; }
+    public static bool ShouldPurgeCloudflareCache { get; private set; }
 
     public static DirectoryPath WyamRootDirectoryPath { get; private set; }
     public static DirectoryPath WyamPublishDirectoryPath { get; private set; }
@@ -38,8 +40,8 @@ public static class BuildParameters
     public static string WyamRecipe { get; private set; }
     public static string WyamTheme { get; private set; }
     public static string WyamSourceFiles { get; private set; }
-    public static IList<string> WyamAssemblyFiles 
-    { 
+    public static IList<string> WyamAssemblyFiles
+    {
         get
         {
             return wyamAssemblyFiles;
@@ -49,8 +51,8 @@ public static class BuildParameters
     public static string WebLinkRoot { get; private set; }
     public static string WebBaseEditUrl { get; private set; }
 
-    public static IDictionary<string, object> WyamSettings 
-    { 
+    public static IDictionary<string, object> WyamSettings
+    {
         get
         {
             var settings =
@@ -64,13 +66,13 @@ public static class BuildParameters
                     { "IncludeGlobalNamespace", false }
                 };
 
-            if (WyamAssemblyFiles.Any()) 
+            if (WyamAssemblyFiles.Any())
             {
                 settings.Add("AssemblyFiles", WyamAssemblyFiles);
             }
 
             return settings;
-        } 
+        }
     }
 
     static BuildParameters()
@@ -94,6 +96,16 @@ public static class BuildParameters
             return !string.IsNullOrEmpty(BuildParameters.Wyam.AccessToken) &&
                 !string.IsNullOrEmpty(BuildParameters.Wyam.DeployRemote) &&
                 !string.IsNullOrEmpty(BuildParameters.Wyam.DeployBranch);
+        }
+    }
+
+    public static bool CanUseCloudflare
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(BuildParameters.Cloudflare.AuthEmail) &&
+                !string.IsNullOrEmpty(BuildParameters.Cloudflare.AuthKey) &&
+                !string.IsNullOrEmpty(BuildParameters.Cloudflare.ZoneId);
         }
     }
 
@@ -124,6 +136,7 @@ public static class BuildParameters
         context.Information("IsReleaseBranch: {0}", IsReleaseBranch);
         context.Information("IsHotFixBranch: {0}", IsHotFixBranch);
         context.Information("ShouldPublishDocumentation: {0}", ShouldPublishDocumentation);
+        context.Information("ShouldPurgeCloudflareCache: {0}", ShouldPurgeCloudflareCache);
         context.Information("IsRunningOnUnix: {0}", IsRunningOnUnix);
         context.Information("IsRunningOnWindows: {0}", IsRunningOnWindows);
         context.Information("IsRunningOnAppVeyor: {0}", IsRunningOnAppVeyor);
@@ -153,6 +166,7 @@ public static class BuildParameters
         string appVeyorAccountName = null,
         string appVeyorProjectSlug = null,
         bool shouldPublishDocumentation = true,
+        bool shouldPurgeCloudflareCache = false,
         DirectoryPath wyamRootDirectoryPath = null,
         DirectoryPath wyamPublishDirectoryPath = null,
         FilePath wyamConfigurationFile = null,
@@ -185,7 +199,7 @@ public static class BuildParameters
 
         if (wyamAssemblyFiles != null)
         {
-            foreach (var assemblyFile in wyamAssemblyFiles) 
+            foreach (var assemblyFile in wyamAssemblyFiles)
             {
                 WyamAssemblyFiles.Add(assemblyFile);
             }
@@ -214,6 +228,7 @@ public static class BuildParameters
         GitHub = GetGitHubCredentials(context);
         AppVeyor = GetAppVeyorCredentials(context);
         Wyam = GetWyamCredentials(context);
+        Cloudflare = GetCloudflareCredentials(context);
         IsPublishBuild = new [] {
             "Create-Release-Notes"
         }.Any(
@@ -235,5 +250,10 @@ public static class BuildParameters
                                 (IsMasterBranch || IsDevelopBranch) &&
                                 shouldPublishDocumentation);
 
+        ShouldPurgeCloudflareCache = (!IsLocalBuild &&
+                                !IsPullRequest &&
+                                IsMainRepository &&
+                                (IsMasterBranch || IsDevelopBranch) &&
+                                shouldPurgeCloudflareCache);
     }
 }

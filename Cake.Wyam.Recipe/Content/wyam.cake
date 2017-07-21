@@ -73,6 +73,30 @@ BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
     publishingError = true;
 });
 
+BuildParameters.Tasks.PurgeCloudflareCacheTask = Task("Purge-Cloudflare-Cache")
+    .IsDependentOn("Publish-Documentation")
+    .WithCriteria(() => BuildParameters.ShouldPurgeCloudflareCache)
+    .Does(() =>
+{
+    if(BuildParameters.CanUseCloudflare)
+    {
+        var settings = new HttpSettings
+        {
+            Headers = new Dictionary<string, string>
+            {
+                { "X-Auth-Email", BuildParameters.Cloudflare.AuthEmail },
+                { "X-Auth-Key", BuildParameters.Cloudflare.AuthKey },
+                { "Content-Type", "application/json" }
+            },
+            EnsureSuccessStatusCode = true
+        };
+
+        var apiUrl = string.Format("https://api.cloudflare.com/client/v4/zones/{0}/purge_cache", BuildParameters.Cloudflare.ZoneId);
+
+        HttpDelete(apiUrl, settings);
+    }
+});
+
 BuildParameters.Tasks.PreviewDocumentationTask = Task("Preview-Documentation")
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
     .Does(() => RequireTool(WyamTool, () => {

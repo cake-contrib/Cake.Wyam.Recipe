@@ -10,5 +10,6 @@ public class BuildTasks
     public CakeTaskBuilder<ActionTask> CleanDocumentationTask { get; set; }
     public CakeTaskBuilder<ActionTask> BuildDocumentationTask { get; set; }
     public CakeTaskBuilder<ActionTask> PublishDocumentationTask { get; set; }
+    public CakeTaskBuilder<ActionTask> PurgeCloudflareCacheTask { get; set; }
     public CakeTaskBuilder<ActionTask> PreviewDocumentationTask { get; set; }
 }
