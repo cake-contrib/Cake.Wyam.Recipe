@@ -28,7 +28,7 @@ API token for accessing AppVeyor. Used to [clean AppVeyor build cache](../usage/
 
 ## WYAM_ACCESS_TOKEN
 
-Access token to use to publish the Wyam documentation. Used to [publish documentation](../usage/publishing-documentation).
+Hosting service (ex. GitHub) access token to use to publish the Wyam documentation. Used to [publish documentation](../usage/publishing-documentation).
 
 ## WYAM_DEPLOY_REMOTE
 
