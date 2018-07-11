@@ -1,15 +1,15 @@
 public class BuildTasks
 {
-    public CakeTaskBuilder PrintAppVeyorEnvironmentVariablesTask { get; set; }
-    public CakeTaskBuilder ClearAppVeyorCacheTask { get; set; }
-    public CakeTaskBuilder ShowInfoTask { get; set; }
-    public CakeTaskBuilder DefaultTask { get; set; }
-    public CakeTaskBuilder AppVeyorTask { get; set; }
-    public CakeTaskBuilder ClearCacheTask { get; set; }
-    public CakeTaskBuilder PreviewTask { get; set; }
-    public CakeTaskBuilder CleanDocumentationTask { get; set; }
-    public CakeTaskBuilder BuildDocumentationTask { get; set; }
-    public CakeTaskBuilder PublishDocumentationTask { get; set; }
-    public CakeTaskBuilder PurgeCloudflareCacheTask { get; set; }
-    public CakeTaskBuilder PreviewDocumentationTask { get; set; }
+    public CakeTaskBuilder<ActionTask> PrintAppVeyorEnvironmentVariablesTask { get; set; }
+    public CakeTaskBuilder<ActionTask> ClearAppVeyorCacheTask { get; set; }
+    public CakeTaskBuilder<ActionTask> ShowInfoTask { get; set; }
+    public CakeTaskBuilder<ActionTask> DefaultTask { get; set; }
+    public CakeTaskBuilder<ActionTask> AppVeyorTask { get; set; }
+    public CakeTaskBuilder<ActionTask> ClearCacheTask { get; set; }
+    public CakeTaskBuilder<ActionTask> PreviewTask { get; set; }
+    public CakeTaskBuilder<ActionTask> CleanDocumentationTask { get; set; }
+    public CakeTaskBuilder<ActionTask> BuildDocumentationTask { get; set; }
+    public CakeTaskBuilder<ActionTask> PublishDocumentationTask { get; set; }
+    public CakeTaskBuilder<ActionTask> PurgeCloudflareCacheTask { get; set; }
+    public CakeTaskBuilder<ActionTask> PreviewDocumentationTask { get; set; }
 }
