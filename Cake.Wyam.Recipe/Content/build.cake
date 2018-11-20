@@ -19,24 +19,16 @@ Setup(context =>
         context.Log.Verbosity = Verbosity.Diagnostic;
     }
 
-    Information("Building " + BuildParameters.Title + " ({0}, {1}) using version {2} of Cake, and version {3} of Cake.Wyam.Recipe. (IsTagged: {4})",
+    Information("Building " + BuildParameters.Title + " ({0}, {1}) using version {2} of Cake, and version {3} of Cake.Wyam.Recipe.",
         BuildParameters.Configuration,
         BuildParameters.Target,
         typeof(ICakeContext).Assembly.GetName().Version.ToString(),
-        BuildMetaData.Version,
-        BuildParameters.IsTagged);
+        BuildMetaData.Version);
 });
 
 Teardown(context =>
 {
     Information("Starting Teardown...");
-
-    if(context.Successful)
-    {
-    }
-    else
-    {
-    }
 
     // Clear nupkg files from tools directory
     if(DirectoryExists(Context.Environment.WorkingDirectory.Combine("tools")))
