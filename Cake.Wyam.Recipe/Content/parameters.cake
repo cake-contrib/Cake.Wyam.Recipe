@@ -21,7 +21,6 @@ public static class BuildParameters
     public static AppVeyorCredentials AppVeyor { get; private set; }
     public static WyamCredentials Wyam { get; private set; }
     public static CloudflareCredentials Cloudflare { get; private set; }
-    public static BuildVersion Version { get; private set; }
     public static BuildPaths Paths { get; private set; }
     public static BuildTasks Tasks { get; set; }
     public static DirectoryPath RootDirectoryPath { get; private set; }
@@ -107,11 +106,6 @@ public static class BuildParameters
                 !string.IsNullOrEmpty(BuildParameters.Cloudflare.AuthKey) &&
                 !string.IsNullOrEmpty(BuildParameters.Cloudflare.ZoneId);
         }
-    }
-
-    public static void SetBuildVersion(BuildVersion version)
-    {
-        Version  = version;
     }
 
     public static void SetBuildPaths(BuildPaths paths)
