@@ -101,7 +101,8 @@ BuildParameters.Tasks.PurgeCloudflareCacheTask = Task("Purge-Cloudflare-Cache")
 BuildParameters.Tasks.PreviewDocumentationTask = Task("Preview-Documentation")
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
     .Does(() => RequireTool(WyamTool, () => {
-        Wyam(new WyamSettings
+        Information(BuildParameters.WebLinkRoot);
+        var settings = new WyamSettings
         {
             Recipe = BuildParameters.WyamRecipe,
             Theme = BuildParameters.WyamTheme,
@@ -110,8 +111,14 @@ BuildParameters.Tasks.PreviewDocumentationTask = Task("Preview-Documentation")
             Preview = true,
             Watch = true,
             ConfigurationFile = BuildParameters.WyamConfigurationFile,
-            PreviewVirtualDirectory = BuildParameters.WebLinkRoot,
             Settings = BuildParameters.WyamSettings
-        });
+        };
+
+        if(BuildParameters.WebLinkRoot != "/")
+        {
+            settings.PreviewVirtualDirectory = BuildParameters.WebLinkRoot;
+        }
+
+        Wyam(settings);
     })
 );
