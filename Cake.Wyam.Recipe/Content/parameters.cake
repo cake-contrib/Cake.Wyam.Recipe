@@ -5,23 +5,17 @@ public static class BuildParameters
     public static string Target { get; private set; }
     public static string Configuration { get; private set; }
     public static bool IsLocalBuild { get; private set; }
-    public static bool IsRunningOnUnix { get; private set; }
-    public static bool IsRunningOnWindows { get; private set; }
     public static bool IsRunningOnAppVeyor { get; private set; }
     public static bool IsPullRequest { get; private set; }
     public static bool IsMainRepository { get; private set; }
     public static bool IsMasterBranch { get; private set; }
     public static bool IsDevelopBranch { get; private set; }
-    public static bool IsReleaseBranch { get; private set; }
-    public static bool IsHotFixBranch { get; private set ; }
-    public static bool IsTagged { get; private set; }
     public static bool IsPublishBuild { get; private set; }
     public static bool IsReleaseBuild { get; private set; }
     public static GitHubCredentials GitHub { get; private set; }
     public static AppVeyorCredentials AppVeyor { get; private set; }
     public static WyamCredentials Wyam { get; private set; }
     public static CloudflareCredentials Cloudflare { get; private set; }
-    public static BuildVersion Version { get; private set; }
     public static BuildPaths Paths { get; private set; }
     public static BuildTasks Tasks { get; set; }
     public static DirectoryPath RootDirectoryPath { get; private set; }
@@ -109,11 +103,6 @@ public static class BuildParameters
         }
     }
 
-    public static void SetBuildVersion(BuildVersion version)
-    {
-        Version  = version;
-    }
-
     public static void SetBuildPaths(BuildPaths paths)
     {
         Paths = paths;
@@ -130,15 +119,10 @@ public static class BuildParameters
         context.Information("IsLocalBuild: {0}", IsLocalBuild);
         context.Information("IsPullRequest: {0}", IsPullRequest);
         context.Information("IsMainRepository: {0}", IsMainRepository);
-        context.Information("IsTagged: {0}", IsTagged);
         context.Information("IsMasterBranch: {0}", IsMasterBranch);
         context.Information("IsDevelopBranch: {0}", IsDevelopBranch);
-        context.Information("IsReleaseBranch: {0}", IsReleaseBranch);
-        context.Information("IsHotFixBranch: {0}", IsHotFixBranch);
         context.Information("ShouldPublishDocumentation: {0}", ShouldPublishDocumentation);
         context.Information("ShouldPurgeCloudflareCache: {0}", ShouldPurgeCloudflareCache);
-        context.Information("IsRunningOnUnix: {0}", IsRunningOnUnix);
-        context.Information("IsRunningOnWindows: {0}", IsRunningOnWindows);
         context.Information("IsRunningOnAppVeyor: {0}", IsRunningOnAppVeyor);
         context.Information("RepositoryOwner: {0}", RepositoryOwner);
         context.Information("RepositoryName: {0}", RepositoryName);
@@ -212,19 +196,11 @@ public static class BuildParameters
         Target = context.Argument("target", "Default");
         Configuration = context.Argument("configuration", "Release");
         IsLocalBuild = buildSystem.IsLocalBuild;
-        IsRunningOnUnix = context.IsRunningOnUnix();
-        IsRunningOnWindows = context.IsRunningOnWindows();
         IsRunningOnAppVeyor = buildSystem.AppVeyor.IsRunningOnAppVeyor;
         IsPullRequest = buildSystem.AppVeyor.Environment.PullRequest.IsPullRequest;
         IsMainRepository = StringComparer.OrdinalIgnoreCase.Equals(string.Concat(repositoryOwner, "/", repositoryName), buildSystem.AppVeyor.Environment.Repository.Name);
         IsMasterBranch = StringComparer.OrdinalIgnoreCase.Equals("master", buildSystem.AppVeyor.Environment.Repository.Branch);
         IsDevelopBranch = StringComparer.OrdinalIgnoreCase.Equals("develop", buildSystem.AppVeyor.Environment.Repository.Branch);
-        IsReleaseBranch = buildSystem.AppVeyor.Environment.Repository.Branch.StartsWith("release", StringComparison.OrdinalIgnoreCase);
-        IsHotFixBranch = buildSystem.AppVeyor.Environment.Repository.Branch.StartsWith("hotfix", StringComparison.OrdinalIgnoreCase);
-        IsTagged = (
-            buildSystem.AppVeyor.Environment.Repository.Tag.IsTag &&
-            !string.IsNullOrWhiteSpace(buildSystem.AppVeyor.Environment.Repository.Tag.Name)
-        );
         GitHub = GetGitHubCredentials(context);
         AppVeyor = GetAppVeyorCredentials(context);
         Wyam = GetWyamCredentials(context);

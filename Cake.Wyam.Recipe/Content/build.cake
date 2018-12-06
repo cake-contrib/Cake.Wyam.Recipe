@@ -19,32 +19,16 @@ Setup(context =>
         context.Log.Verbosity = Verbosity.Diagnostic;
     }
 
-    RequireTool(GitVersionTool, () => {
-        BuildParameters.SetBuildVersion(
-            BuildVersion.CalculatingSemanticVersion(
-                context: Context
-            )
-        );
-    });
-
-    Information("Building version {0} of " + BuildParameters.Title + " ({1}, {2}) using version {3} of Cake. (IsTagged: {4})",
-        BuildParameters.Version.SemVersion,
+    Information("Building " + BuildParameters.Title + " ({0}, {1}) using version {2} of Cake, and version {3} of Cake.Wyam.Recipe.",
         BuildParameters.Configuration,
         BuildParameters.Target,
-        BuildParameters.Version.CakeVersion,
-        BuildParameters.IsTagged);
+        typeof(ICakeContext).Assembly.GetName().Version.ToString(),
+        BuildMetaData.Version);
 });
 
 Teardown(context =>
 {
     Information("Starting Teardown...");
-
-    if(context.Successful)
-    {
-    }
-    else
-    {
-    }
 
     // Clear nupkg files from tools directory
     if(DirectoryExists(Context.Environment.WorkingDirectory.Combine("tools")))
