@@ -2,7 +2,7 @@
 // ADDINS
 ///////////////////////////////////////////////////////////////////////////////
 
-#addin nuget:?package=Cake.Figlet&version=1.3.0
+#addin nuget:?package=Cake.Figlet&version=1.3.1
 #addin nuget:?package=Cake.Git&version=0.21.0
 #addin nuget:?package=Cake.Kudu&version=0.10.0
 #addin nuget:?package=Cake.Wyam&version=2.2.8
