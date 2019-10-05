@@ -3,7 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 private const string KuduSyncTool = "#tool nuget:?package=KuduSync.NET&version=1.4.0";
-private const string WyamTool = "#tool nuget:?package=Wyam&version=2.2.5";
+private const string WyamTool = "#tool nuget:?package=Wyam&version=2.2.8";
 
 Action<string, Action> RequireTool = (tool, action) => {
     var script = MakeAbsolute(File(string.Format("./{0}.cake", Guid.NewGuid())));
