@@ -44,6 +44,8 @@ public static class BuildParameters
     public static string WebHost { get; private set; }
     public static string WebLinkRoot { get; private set; }
     public static string WebBaseEditUrl { get; private set; }
+    public static string MasterBranchName { get; private set; }
+    public static string DevelopBranchName { get; private set; }
 
     public static IDictionary<string, object> WyamSettings
     {
@@ -138,6 +140,8 @@ public static class BuildParameters
         context.Information("WebHost: {0}", WebHost);
         context.Information("WebLinkRoot: {0}", WebLinkRoot);
         context.Information("WebBaseEditUrl: {0}", WebBaseEditUrl);
+        context.Information("MasterBranchName: {0}", MasterBranchName);
+        context.Information("DevelopBranchName: {0}", DevelopBranchName);
     }
 
     public static void SetParameters(
@@ -160,7 +164,9 @@ public static class BuildParameters
         IEnumerable<string> wyamAssemblyFiles = null,
         string webHost = null,
         string webLinkRoot = null,
-        string webBaseEditUrl = null)
+        string webBaseEditUrl = null,
+        string masterBranchName = "master",
+        string developBranchName = "develop")
     {
         if (context == null)
         {
@@ -193,14 +199,17 @@ public static class BuildParameters
         WebLinkRoot = webLinkRoot ?? "/";
         WebBaseEditUrl = webBaseEditUrl ?? string.Format("https://github.com/{0}/{1}/tree/master/input/", repositoryOwner, title);
 
+        MasterBranchName = masterBranchName;
+        DevelopBranchName = developBranchName;
+
         Target = context.Argument("target", "Default");
         Configuration = context.Argument("configuration", "Release");
         IsLocalBuild = buildSystem.IsLocalBuild;
         IsRunningOnAppVeyor = buildSystem.AppVeyor.IsRunningOnAppVeyor;
         IsPullRequest = buildSystem.AppVeyor.Environment.PullRequest.IsPullRequest;
         IsMainRepository = StringComparer.OrdinalIgnoreCase.Equals(string.Concat(repositoryOwner, "/", repositoryName), buildSystem.AppVeyor.Environment.Repository.Name);
-        IsMasterBranch = StringComparer.OrdinalIgnoreCase.Equals("master", buildSystem.AppVeyor.Environment.Repository.Branch);
-        IsDevelopBranch = StringComparer.OrdinalIgnoreCase.Equals("develop", buildSystem.AppVeyor.Environment.Repository.Branch);
+        IsMasterBranch = StringComparer.OrdinalIgnoreCase.Equals(MasterBranchName, buildSystem.AppVeyor.Environment.Repository.Branch);
+        IsDevelopBranch = StringComparer.OrdinalIgnoreCase.Equals(DevelopBranchName, buildSystem.AppVeyor.Environment.Repository.Branch);
         GitHub = GetGitHubCredentials(context);
         AppVeyor = GetAppVeyorCredentials(context);
         Wyam = GetWyamCredentials(context);
