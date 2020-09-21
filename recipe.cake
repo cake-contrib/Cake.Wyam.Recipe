@@ -1,4 +1,4 @@
-#load nuget:?package=Cake.Recipe&version=1.0.0
+#load nuget:https://pkgs.dev.azure.com/cake-contrib/Home/_packaging/addins%40Local/nuget/v3/index.json?package=Cake.Recipe&version=2.0.0-alpha0471&prerelease
 
 Environment.SetVariableNames();
 
@@ -9,8 +9,7 @@ BuildParameters.SetParameters(context: Context,
                             repositoryOwner: "cake-contrib",
                             repositoryName: "Cake.Wyam.Recipe",
                             appVeyorAccountName: "cakecontrib",
-                            nuspecFilePath: "./Cake.Wyam.Recipe/Cake.Wyam.Recipe.nuspec",
-                            shouldRunGitVersion: true);
+                            nuspecFilePath: "./Cake.Wyam.Recipe/Cake.Wyam.Recipe.nuspec");
 
 BuildParameters.PrintParameters(Context);
 
@@ -20,18 +19,20 @@ BuildParameters.Tasks.CleanTask
     .IsDependentOn("Generate-Version-File");
 
 Task("Generate-Version-File")
-    .Does(() => {
+    .Does<BuildVersion>((context, buildVersion) => {
         var buildMetaDataCodeGen = TransformText(@"
         public class BuildMetaData
         {
             public static string Date { get; } = ""<%date%>"";
             public static string Version { get; } = ""<%version%>"";
+            public static string CakeVersion { get; } = ""<%cakeversion%>"";
         }",
         "<%",
         "%>"
         )
-   .WithToken("date", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"))
-   .WithToken("version", BuildParameters.Version.SemVersion)
+   .WithToken("date", BuildMetaData.Date)
+   .WithToken("version", buildVersion.SemVersion)
+   .WithToken("cakeversion", BuildMetaData.CakeVersion)
    .ToString();
 
     System.IO.File.WriteAllText(
