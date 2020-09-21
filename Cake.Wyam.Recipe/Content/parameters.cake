@@ -76,15 +76,6 @@ public static class BuildParameters
         Tasks = new BuildTasks();
     }
 
-    public static bool CanUseGitReleaseManager
-    {
-        get
-        {
-            return !string.IsNullOrEmpty(BuildParameters.GitHub.UserName) &&
-                !string.IsNullOrEmpty(BuildParameters.GitHub.Password);
-        }
-    }
-
     public static bool CanUseWyam
     {
         get
