@@ -134,7 +134,7 @@ public static class BuildParameters
         context.Information("WebBaseEditUrl: {0}", WebBaseEditUrl);
         context.Information("MasterBranchName: {0}", MasterBranchName);
         context.Information("DevelopBranchName: {0}", DevelopBranchName);
-        context.Information("IsRunningOnDotNetCore: {0}", IsRunningOnDotNetCore)
+        context.Information("IsRunningOnDotNetCore: {0}", IsRunningOnDotNetCore);
     }
 
     public static void SetParameters(
