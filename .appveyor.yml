@@ -2,7 +2,7 @@
 #  Build Script                   #
 #---------------------------------#
 build_script:
-using  - ps: .\build.ps1 --target CI
+- ps: .\build.ps1 --target CI
 
 # Tests
 test: off
