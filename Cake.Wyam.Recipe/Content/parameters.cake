@@ -46,6 +46,7 @@ public static class BuildParameters
     public static string WebBaseEditUrl { get; private set; }
     public static string MasterBranchName { get; private set; }
     public static string DevelopBranchName { get; private set; }
+    public static bool IsRunningOnDotNetCore { get; private set; }
 
     public static IDictionary<string, object> WyamSettings
     {
@@ -133,6 +134,7 @@ public static class BuildParameters
         context.Information("WebBaseEditUrl: {0}", WebBaseEditUrl);
         context.Information("MasterBranchName: {0}", MasterBranchName);
         context.Information("DevelopBranchName: {0}", DevelopBranchName);
+        context.Information("IsRunningOnDotNetCore: {0}", IsRunningOnDotNetCore)
     }
 
     public static void SetParameters(
@@ -192,6 +194,7 @@ public static class BuildParameters
 
         MasterBranchName = masterBranchName;
         DevelopBranchName = developBranchName;
+        IsRunningOnDotNetCore = context.Environment.Runtime.IsCoreClr;
 
         Target = context.Argument("target", "Default");
         Configuration = context.Argument("configuration", "Release");
