@@ -30,6 +30,17 @@ BuildParameters.Tasks.CleanTask
 
 Task("Generate-Version-File")
     .Does<BuildVersion>((context, buildVersion) => {
+        // Write metadata to configuration file
+        System.IO.File.WriteAllText(
+            "./Cake.Wyam.Recipe/cake-version.yml",
+            @"TargetCakeVersion: 0.33.0
+TargetFrameworks:
+- netcoreapp2.0
+- netcoreapp2.1
+- net46"
+        );
+
+        // Write metadata to class for use when running a build
         var buildMetaDataCodeGen = TransformText(@"
         public class BuildMetaData
         {
