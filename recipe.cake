@@ -33,11 +33,14 @@ Task("Generate-Version-File")
         // Write metadata to configuration file
         System.IO.File.WriteAllText(
             "./Cake.Wyam.Recipe/cake-version.yml",
-            @"TargetCakeVersion: 0.33.0
+            @"TargetCakeVersion: 1.0.0
 TargetFrameworks:
+- net461
 - netcoreapp2.0
 - netcoreapp2.1
-- net46"
+- netcoreapp3.0
+- netcoreapp3.1
+- net5.0"
         );
 
         // Write metadata to class for use when running a build
