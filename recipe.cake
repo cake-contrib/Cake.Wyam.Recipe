@@ -1,19 +1,29 @@
-#load nuget:https://pkgs.dev.azure.com/cake-contrib/Home/_packaging/addins%40Local/nuget/v3/index.json?package=Cake.Recipe&version=2.0.0-alpha0471&prerelease
+#load nuget:?package=Cake.Recipe&version=3.0.1
+
+//*************************************************************************************************
+// Settings
+//*************************************************************************************************
 
 Environment.SetVariableNames();
 
-BuildParameters.SetParameters(context: Context,
-                            buildSystem: BuildSystem,
-                            sourceDirectoryPath: "./src",
-                            title: "Cake.Wyam.Recipe",
-                            repositoryOwner: "cake-contrib",
-                            repositoryName: "Cake.Wyam.Recipe",
-                            appVeyorAccountName: "cakecontrib",
-                            nuspecFilePath: "./Cake.Wyam.Recipe/Cake.Wyam.Recipe.nuspec");
+BuildParameters.SetParameters(
+    context: Context,
+    buildSystem: BuildSystem,
+    sourceDirectoryPath: "./src",
+    title: "Cake.Wyam.Recipe",
+    repositoryOwner: "cake-contrib",
+    repositoryName: "Cake.Wyam.Recipe",
+    appVeyorAccountName: "cakecontrib",
+    nuspecFilePath: "./Cake.Wyam.Recipe/Cake.Wyam.Recipe.nuspec",
+    shouldPostToGitter: false);  // Disabled because it's currently failing
 
 BuildParameters.PrintParameters(Context);
 
 ToolSettings.SetToolSettings(context: Context);
+
+//*************************************************************************************************
+// Extensions
+//*************************************************************************************************
 
 BuildParameters.Tasks.CleanTask
     .IsDependentOn("Generate-Version-File");
@@ -40,5 +50,9 @@ Task("Generate-Version-File")
         buildMetaDataCodeGen
         );
     });
+
+//*************************************************************************************************
+// Execution
+//*************************************************************************************************
 
 Build.RunNuGet();
