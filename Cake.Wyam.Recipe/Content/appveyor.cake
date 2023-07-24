@@ -36,11 +36,13 @@ BuildParameters.Tasks.PrintAppVeyorEnvironmentVariablesTask = Task("Print-AppVey
 
 BuildParameters.Tasks.ClearAppVeyorCacheTask = Task("Clear-AppVeyor-Cache")
     .Does(() =>
-        RequireAddin(@"#addin nuget:?package=Cake.AppVeyor&version=1.1.0.9
-        AppVeyorClearCache(new AppVeyorSettings() { ApiToken = EnvironmentVariable(""TEMP_APPVEYOR_TOKEN"") },
-            EnvironmentVariable(""TEMP_APPVEYOR_ACCOUNT_NAME""),
-            EnvironmentVariable(""TEMP_APPVEYOR_PROJECT_SLUG""));
-        ",
+        RequireAddin("#addin nuget:?package=Refit&version=4.6.58" + System.Environment.NewLine +
+"#addin nuget:?package=Cake.AppVeyor&version=5.0.1" + System.Environment.NewLine +
+@"AppVeyorClearCache(
+    new AppVeyorSettings() { ApiToken = EnvironmentVariable(""TEMP_APPVEYOR_TOKEN"") },
+    EnvironmentVariable(""TEMP_APPVEYOR_ACCOUNT_NAME""),
+    EnvironmentVariable(""TEMP_APPVEYOR_PROJECT_SLUG""));
+",
         new Dictionary<string, string> {{"TEMP_APPVEYOR_TOKEN", BuildParameters.AppVeyor.ApiToken},
             {"TEMP_APPVEYOR_ACCOUNT_NAME", BuildParameters.AppVeyorAccountName},
             {"TEMP_APPVEYOR_PROJECT_SLUG", BuildParameters.AppVeyorProjectSlug}}
