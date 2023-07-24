@@ -10,7 +10,8 @@ var publishingError = false;
 
 Setup(context =>
 {
-    Information(Figlet(BuildParameters.Title));
+    Spectre.Console.AnsiConsole.Write(
+        new Spectre.Console.FigletText(BuildParameters.Title));
 
     Information("Starting Setup...");
 
