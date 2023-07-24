@@ -37,7 +37,7 @@ BuildParameters.Tasks.PrintAppVeyorEnvironmentVariablesTask = Task("Print-AppVey
 BuildParameters.Tasks.ClearAppVeyorCacheTask = Task("Clear-AppVeyor-Cache")
     .Does(() =>
         RequireAddin("#addin nuget:?package=Refit&version=4.6.58" + System.Environment.NewLine +
-"#addin nuget:?package=Cake.AppVeyor&version=5.0.1" + System.Environment.NewLine +
+"#addin nuget:?package=Cake.AppVeyor&version=6.0.0" + System.Environment.NewLine +
 @"AppVeyorClearCache(
     new AppVeyorSettings() { ApiToken = EnvironmentVariable(""TEMP_APPVEYOR_TOKEN"") },
     EnvironmentVariable(""TEMP_APPVEYOR_ACCOUNT_NAME""),
