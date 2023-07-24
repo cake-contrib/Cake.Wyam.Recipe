@@ -295,3 +295,5 @@ tools/**
 *.xsd.cs
 
 Cake.Wyam.Recipe/Content/version.cake
+Cake.Wyam.Recipe/cake-version.yml
+BuildArtifacts/

@@ -8,9 +8,9 @@
     <description>Re-usable build script for Cake that can be used for numerous Wyam projects.</description>
     <license type="expression">MIT</license>
     <projectUrl>http://cake-contrib.github.io/Cake.Wyam.Recipe/</projectUrl>
-    <iconUrl>https://cdn.rawgit.com/cake-contrib/graphics/a5cf0f881c390650144b2243ae551d5b9f836196/png/cake-contrib-medium.png</iconUrl>
+    <icon>icon.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <repository type="git" url="https://github.com/cake-contrib/Cake.Wyam.Recipe.git"/>
-    <tags>Build Cake Wyam Recipe</tags>
+    <tags>build cake cake-recipe wyam</tags>
   </metadata>
 </package>
