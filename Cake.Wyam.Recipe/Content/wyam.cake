@@ -16,7 +16,7 @@ BuildParameters.Tasks.CleanDocumentationTask = Task("Clean-Documentation")
 
 BuildParameters.Tasks.BuildDocumentationTask = Task("Build-Documentation")
     .IsDependentOn("Clean-Documentation")
-    .Does(() => RequireTool(BuildParameters.IsRunningOnDotNetCore ? ToolSettings.WyamGlobalTool : ToolSettings.WyamTool, () => {
+    .Does(() => RequireTool(ToolSettings.WyamGlobalTool, () => {
         Wyam(new WyamSettings
         {
             Recipe = BuildParameters.WyamRecipe,
@@ -33,7 +33,7 @@ BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
     .IsDependentOn("Build-Documentation")
     .WithCriteria(() => BuildParameters.ShouldPublishDocumentation)
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
-    .Does(() => RequireTool(BuildParameters.IsRunningOnDotNetCore ? ToolSettings.KuduSyncGlobalTool : ToolSettings.KuduSyncTool, () => {
+    .Does(() => RequireTool(ToolSettings.KuduSyncGlobalTool, () => {
         if(BuildParameters.CanUseWyam)
         {
             var sourceCommit = GitLogTip("./");
@@ -100,7 +100,7 @@ BuildParameters.Tasks.PurgeCloudflareCacheTask = Task("Purge-Cloudflare-Cache")
 
 BuildParameters.Tasks.PreviewDocumentationTask = Task("Preview-Documentation")
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
-    .Does(() => RequireTool(BuildParameters.IsRunningOnDotNetCore ? ToolSettings.WyamGlobalTool : ToolSettings.WyamTool, () => {
+    .Does(() => RequireTool(ToolSettings.WyamGlobalTool, () => {
         Information(BuildParameters.WebLinkRoot);
         var settings = new WyamSettings
         {
