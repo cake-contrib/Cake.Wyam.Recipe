@@ -36,33 +36,33 @@ BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
     .Does(() => RequireTool(BuildParameters.IsRunningOnDotNetCore ? ToolSettings.KuduSyncGlobalTool : ToolSettings.KuduSyncTool, () => {
         if(BuildParameters.CanUseWyam)
         {
-            var sourceCommit = GitLogTip("./");
+            var sourceCommit = BuildParameters.GitProvider.GetCommit("./");
 
             var publishFolder = BuildParameters.WyamPublishDirectoryPath.Combine(DateTime.Now.ToString("yyyyMMdd_HHmmss"));
             Information("Publishing Folder: {0}", publishFolder);
             Information("Getting publish branch...");
-            GitClone(BuildParameters.Wyam.DeployRemote, publishFolder, new GitCloneSettings{ BranchName = BuildParameters.Wyam.DeployBranch });
+            BuildParameters.GitProvider.Clone(BuildParameters.Wyam.DeployRemote, publishFolder, BuildParameters.Wyam.DeployBranch);
 
             Information("Sync output files...");
             Kudu.Sync(BuildParameters.Paths.Directories.PublishedDocumentation, publishFolder, new KuduSyncSettings {
                 ArgumentCustomization = args=>args.Append("--ignore").AppendQuoted(".git;CNAME")
             });
 
-            if (GitHasUncommitedChanges(publishFolder))
+            if (BuildParameters.GitProvider.HasUncommitedChanges(publishFolder))
             {
                 Information("Stage all changes...");
                 GitAddAll(publishFolder);
 
                 Information("Commit all changes...");
-                GitCommit(
+                BuildParameters.GitProvider.Commit(
                     publishFolder,
-                    sourceCommit.Committer.Name,
-                    sourceCommit.Committer.Email,
+                    sourceCommit.Name,
+                    sourceCommit.Email,
                     string.Format("AppVeyor Publish: {0}\r\n{1}", sourceCommit.Sha, sourceCommit.Message)
                 );
 
                 Information("Pushing all changes...");
-                GitPush(publishFolder, BuildParameters.Wyam.AccessToken, "x-oauth-basic", BuildParameters.Wyam.DeployBranch);
+                BuildParameters.GitProvider.Push(publishFolder, BuildParameters.Wyam.AccessToken, "x-oauth-basic", BuildParameters.Wyam.DeployBranch);
             }
         }
         else
