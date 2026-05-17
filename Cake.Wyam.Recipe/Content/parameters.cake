@@ -47,6 +47,7 @@ public static class BuildParameters
     public static string MasterBranchName { get; private set; }
     public static string DevelopBranchName { get; private set; }
     public static bool IsRunningOnDotNetCore { get; private set; }
+    public static IGitProvider GitProvider { get; private set; }
 
     public static IDictionary<string, object> WyamSettings
     {
@@ -159,7 +160,8 @@ public static class BuildParameters
         string webLinkRoot = null,
         string webBaseEditUrl = null,
         string masterBranchName = "master",
-        string developBranchName = "develop")
+        string developBranchName = "develop",
+        GitProviderType gitProviderType = GitProviderType.CakeGit)
     {
         if (context == null)
         {
@@ -234,5 +236,17 @@ public static class BuildParameters
                                 IsMainRepository &&
                                 (IsMasterBranch || IsDevelopBranch) &&
                                 shouldPurgeCloudflareCache);
-    }
+
+        switch (gitProviderType)
+        {
+            case GitProviderType.CakeGit:
+                context.Information("Using Cake.Git for interacting with Git repository");
+                GitProvider = new CakeGitProvider();
+            case GitProviderType.Cli:
+                context.Information("Using Git CLI for interacting with Git repository");
+                GitProvider = new CliGitProvider();
+            default:
+                throw new NotImplementedException("Unsupported Git provider");
+        }
+   }
 }
